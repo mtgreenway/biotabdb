@@ -5,14 +5,23 @@
 #for i in $(cat cancers);do ./getfiles.sh $i;done
 
 rec_fix () {
-    sed "$(perl -ne "print \$1 if /line (\d*)/" < $2)d" $1 > $1.fix
-    $postgres $database -c "copy $table FROM '$1.fix'" > /dev/null 2>$2.fix
+    local tsv_file_name=$1
+    local error_file_name=$2
+    local table_name=$3
+
+    echo "TSV FILE NAME "$tsv_file_name
+    echo "ERROR FILE NAME "$error_file_name
+
+    sed "$(perl -ne "print \$1 if /line (\d*)/" < $error_file_name)d" $tsv_file_name > $tsv_file_name.fix
+    $postgres $database -c "copy $table_name FROM '$tsv_file_name.fix'" > /dev/null 2>$error_file_name.fix
     if [ $? == 0 ]
     then
-        rm $2.fix
+        rm $error_file_name.fix
+        rm $tsv_file_name.fix
     else
-        cat $2.fix
-        rec_fix $1.fix $2.fix
+        cat $error_file_name.fix
+        rec_fix $tsv_file_name.fix $error_file_name.fix $table_name
+        rm $tsv_file_name.fix
     fi
 }
 
@@ -48,11 +57,10 @@ print fileinput.input()[0].replace('.','_'),")
         then
             rm $rundir/$filename
         else
-            rec_fix $tsvfile $rundir/$filename
+            rec_fix $tsvfile $rundir/$filename $table
         fi
-    ) &
+    )
 done
 
 cat $rundir/* > .errors
-
 rm -rf $rundir

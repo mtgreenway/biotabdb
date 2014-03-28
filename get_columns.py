@@ -52,7 +52,7 @@ def small_bad_tables():
                     reader = csv.reader(f, delimiter='\t')
                     header = reader.next()
                     if len(header) != len(set(header)):
-                        header = ["%s%s" % (v, i)if v in header[i:] else v
+                        header = ["%s%s" % (v, i) if v in header[i+1:] else v
                             for i, v in enumerate(header)]
 
 
