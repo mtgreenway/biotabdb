@@ -5,8 +5,9 @@ base=https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/
 IFS=$'\n'
 
 status=$(curl -s -I ${base}MANIFEST.txt | head -n 1)
-if [[ "$status" != *HTTP/1.1\ 200\ OK* ]]
+if [[ "$status" != *HTTP/1.*\ 200* ]]
 then
+    echo $status
     echo "$DISEASE has no manifest"
     exit 1
 fi

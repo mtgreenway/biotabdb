@@ -21,7 +21,7 @@ import argparse
 
 def list_tables():
     disease_specific = collections.defaultdict(dict)
-    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt']
+    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt', 'BCRBiotabREADME.html']
     file_types = {}
     for dirent in os.walk('.'):
         if dirent[0].startswith("./."):
@@ -37,7 +37,7 @@ def list_tables():
 
 def small_bad_tables():
     disease_specific = collections.defaultdict(dict)
-    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt']
+    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt', 'BCRBiotabREADME.html']
     file_types = {}
     for dirent in os.walk('.'):
         if dirent[0].startswith("./."):
@@ -64,7 +64,7 @@ def small_bad_tables():
 
 def file_type_info():
     disease_specific = collections.defaultdict(dict)
-    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt']
+    ignore = ['MANIFEST.txt', 'CHANGES_DCC.txt', 'README_DCC.txt', 'BCRBiotabREADME.html']
     file_types = {}
     for dirent in os.walk('.'):
         if dirent[0].startswith("./."):

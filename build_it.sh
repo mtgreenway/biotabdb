@@ -2,7 +2,7 @@
 
 #rm */*.fix
 
-#for i in $(cat cancers);do ./getfiles.sh $i;done
+for i in $(cat cancers);do ./getfiles.sh $i;done
 
 rec_fix () {
     local tsv_file_name=$1
@@ -25,13 +25,14 @@ rec_fix () {
     fi
 }
 
-base_dir="/home/ubuntu/tcga/"
-postgres="sudo -iu postgres /usr/local/pgsql/bin/psql"
+base_dir="$(pwd)/"
+postgres="sudo -iu postgres psql"
 database="tcga"
 rundir=.run
 
 mkdir -p $rundir
 
+$postgres -c "CREATE USER $db_user password '$db_password';"
 $postgres -c "drop database $database"
 $postgres -c "create database $database"
 
@@ -52,6 +53,7 @@ print fileinput.input()[0].replace('.','_'),")
         filename=nationwidechildrens.org_$file_format.txt
         tsvfile=${base_dir}$disease/$filename
 
+        $postgres -c "GRANT ALL ON $table TO $db_user;"
         $postgres $database -c "copy $table FROM '$tsvfile'" > /dev/null 2>$rundir/$filename
         if [ $? == 0 ]
         then
