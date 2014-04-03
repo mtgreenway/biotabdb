@@ -30,6 +30,8 @@ postgres="sudo -iu postgres psql"
 database="tcga"
 rundir=.run
 
+set -e
+
 mkdir -p $rundir
 
 $postgres -c "CREATE USER $db_user password '$db_password';"
@@ -41,6 +43,8 @@ echo "creating tables ..."
 python get_columns.py --separate | $postgres $database > /dev/null
 
 echo "filling tables ..."
+
+set +e
 
 for file_format in $(python get_columns.py --list_tables)
 do
